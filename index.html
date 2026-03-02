@@ -1,0 +1,1604 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>MaGu Multiservicios</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+:root {
+  --bg:       #080c14;
+  --bg2:      #0d1120;
+  --bg3:      #111827;
+  --surface:  #1a2235;
+  --surface2: #1f2940;
+  --border:   #253048;
+  --accent:   #3d7eff;
+  --accent2:  #00e5c0;
+  --accent3:  #ff6b35;
+  --warn:     #fbbf24;
+  --danger:   #ef4444;
+  --success:  #22c55e;
+  --text:     #e2e8f0;
+  --text2:    #7d8fa3;
+  --text3:    #374151;
+  --font:     'Plus Jakarta Sans', sans-serif;
+  --mono:     'JetBrains Mono', monospace;
+  --r:        10px;
+  --r2:       16px;
+  --shadow:   0 12px 40px rgba(0,0,0,.5);
+}
+*{margin:0;padding:0;box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{font-family:var(--font);background:var(--bg);color:var(--text);min-height:100vh;line-height:1.6}
+
+/* ── TYPOGRAPHY ── */
+h1{font-size:28px;font-weight:800;letter-spacing:-.5px}
+h2{font-size:22px;font-weight:700}
+h3{font-size:16px;font-weight:700}
+
+/* ── LOGIN ── */
+#screen-login{
+  min-height:100vh;display:flex;align-items:center;justify-content:center;
+  background:radial-gradient(ellipse at 30% 50%, rgba(61,126,255,.12) 0%, transparent 60%),
+             radial-gradient(ellipse at 70% 20%, rgba(0,229,192,.08) 0%, transparent 60%),
+             var(--bg);
+  padding:20px;
+}
+.login-card{
+  width:100%;max-width:400px;
+  background:var(--bg2);
+  border:1px solid var(--border);
+  border-radius:24px;
+  padding:40px;
+  box-shadow:var(--shadow);
+}
+.login-logo{text-align:center;margin-bottom:32px}
+.login-logo .mark{
+  font-size:28px;font-weight:800;
+  background:linear-gradient(135deg,var(--accent),var(--accent2));
+  -webkit-background-clip:text;-webkit-text-fill-color:transparent;
+}
+.login-logo .sub{font-size:12px;color:var(--text2);margin-top:4px;font-family:var(--mono)}
+.login-error{
+  background:rgba(239,68,68,.1);border:1px solid rgba(239,68,68,.3);
+  color:#fca5a5;border-radius:8px;padding:10px 14px;
+  font-size:13px;margin-bottom:16px;display:none;
+}
+
+/* ── SIDEBAR ── */
+.sidebar{
+  position:fixed;left:0;top:0;bottom:0;width:250px;
+  background:var(--bg2);border-right:1px solid var(--border);
+  display:flex;flex-direction:column;z-index:100;
+  transition:transform .3s;
+}
+.logo{padding:22px 18px;border-bottom:1px solid var(--border)}
+.logo-mark{font-size:20px;font-weight:800;background:linear-gradient(135deg,var(--accent),var(--accent2));-webkit-background-clip:text;-webkit-text-fill-color:transparent}
+.logo-sub{font-size:10px;color:var(--text2);font-family:var(--mono);margin-top:2px}
+nav{flex:1;padding:14px 10px;overflow-y:auto}
+.nav-section{margin-bottom:20px}
+.nav-lbl{font-size:9px;font-weight:700;letter-spacing:2px;color:var(--text3);text-transform:uppercase;padding:0 8px;margin-bottom:6px}
+.nav-item{
+  display:flex;align-items:center;gap:10px;padding:9px 12px;
+  border-radius:9px;cursor:pointer;color:var(--text2);
+  font-size:13px;font-weight:600;transition:all .15s;position:relative;
+}
+.nav-item:hover,.nav-item.active{background:var(--surface);color:var(--text)}
+.nav-item.active::before{
+  content:'';position:absolute;left:-10px;top:50%;transform:translateY(-50%);
+  width:3px;height:18px;background:var(--accent);border-radius:0 2px 2px 0;
+}
+.nav-icon{font-size:16px;width:20px;text-align:center}
+.nav-badge{
+  margin-left:auto;background:var(--danger);color:#fff;
+  font-size:10px;font-weight:700;padding:1px 6px;border-radius:20px;
+}
+.sidebar-footer{padding:14px;border-top:1px solid var(--border)}
+.user-card{
+  display:flex;align-items:center;gap:10px;padding:10px;
+  border-radius:10px;background:var(--surface);cursor:pointer;
+  transition:background .15s;
+}
+.user-card:hover{background:var(--surface2)}
+.avatar{
+  width:34px;height:34px;border-radius:9px;
+  background:linear-gradient(135deg,var(--accent),var(--accent2));
+  display:flex;align-items:center;justify-content:center;
+  font-weight:800;font-size:13px;color:#fff;flex-shrink:0;
+}
+.user-info .name{font-size:13px;font-weight:700}
+.user-info .role{font-size:10px;color:var(--text2);text-transform:uppercase;letter-spacing:.5px}
+.user-info .role.admin{color:var(--accent2)}
+
+/* ── MAIN ── */
+.main{margin-left:250px;min-height:100vh;display:flex;flex-direction:column}
+.topbar{
+  position:sticky;top:0;z-index:50;
+  background:rgba(8,12,20,.85);backdrop-filter:blur(20px);
+  border-bottom:1px solid var(--border);
+  padding:14px 28px;display:flex;align-items:center;gap:14px;
+}
+.topbar-title{font-size:17px;font-weight:800;flex:1}
+.menu-toggle{
+  display:none;background:var(--surface);border:1px solid var(--border);
+  border-radius:8px;padding:7px;cursor:pointer;color:var(--text);font-size:16px;
+}
+
+/* ── BUTTONS ── */
+.btn{
+  display:inline-flex;align-items:center;gap:7px;
+  padding:9px 16px;border-radius:9px;
+  font-family:var(--font);font-size:13px;font-weight:700;
+  border:none;cursor:pointer;transition:all .15s;white-space:nowrap;
+}
+.btn-primary{background:var(--accent);color:#fff}
+.btn-primary:hover{background:#5590ff;transform:translateY(-1px);box-shadow:0 4px 20px rgba(61,126,255,.35)}
+.btn-ghost{background:var(--surface);color:var(--text2);border:1px solid var(--border)}
+.btn-ghost:hover{color:var(--text);background:var(--surface2)}
+.btn-danger{background:var(--danger);color:#fff}
+.btn-danger:hover{background:#f87171}
+.btn-success{background:var(--success);color:#052e16}
+.btn-warn{background:var(--warn);color:#451a03}
+.btn-sm{padding:6px 12px;font-size:12px;border-radius:8px}
+.btn-xs{padding:4px 9px;font-size:11px;border-radius:6px}
+.btn:disabled{opacity:.5;cursor:not-allowed;transform:none!important}
+
+/* ── PAGES ── */
+.page{padding:28px;display:none}
+.page.active{display:block}
+
+/* ── CARDS ── */
+.stats-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(160px,1fr));gap:14px;margin-bottom:28px}
+.stat-card{
+  background:var(--surface);border:1px solid var(--border);
+  border-radius:var(--r2);padding:18px 20px;position:relative;overflow:hidden;
+  transition:transform .2s;cursor:default;
+}
+.stat-card::before{content:'';position:absolute;top:0;left:0;right:0;height:2px}
+.stat-card.blue::before{background:var(--accent)}
+.stat-card.green::before{background:var(--success)}
+.stat-card.orange::before{background:var(--accent3)}
+.stat-card.red::before{background:var(--danger)}
+.stat-card.teal::before{background:var(--accent2)}
+.stat-card.yellow::before{background:var(--warn)}
+.stat-lbl{font-size:11px;color:var(--text2);text-transform:uppercase;letter-spacing:1px;margin-bottom:6px}
+.stat-val{font-size:32px;font-weight:800;font-family:var(--mono);line-height:1}
+.stat-icon{position:absolute;top:16px;right:16px;font-size:24px;opacity:.12}
+.section-hdr{display:flex;align-items:center;justify-content:space-between;margin-bottom:18px}
+.section-title{font-size:16px;font-weight:800}
+
+/* ── PARTE CARDS ── */
+.partes-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(320px,1fr));gap:14px}
+.parte-card{
+  background:var(--surface);border:1px solid var(--border);
+  border-radius:var(--r2);overflow:hidden;cursor:pointer;
+  transition:all .2s;
+}
+.parte-card:hover{transform:translateY(-2px);box-shadow:var(--shadow);border-color:var(--accent)}
+.parte-card-head{
+  padding:14px 18px 12px;display:flex;align-items:flex-start;
+  justify-content:space-between;border-bottom:1px solid var(--border);
+}
+.parte-num{font-family:var(--mono);font-size:10px;color:var(--accent);font-weight:500}
+.estado-badge{
+  font-size:10px;font-weight:700;padding:3px 9px;border-radius:20px;
+  text-transform:uppercase;letter-spacing:.5px;flex-shrink:0;
+}
+.eb-pendiente{background:rgba(251,191,36,.15);color:var(--warn)}
+.eb-en_progreso{background:rgba(61,126,255,.15);color:var(--accent)}
+.eb-completado{background:rgba(34,197,94,.15);color:var(--success)}
+.eb-cancelado{background:rgba(239,68,68,.15);color:var(--danger)}
+.parte-tit{font-size:14px;font-weight:700;margin-top:4px;line-height:1.3}
+.parte-meta{display:flex;flex-wrap:wrap;gap:10px;margin-top:8px;font-size:11px;color:var(--text2)}
+.parte-meta span{display:flex;align-items:center;gap:3px}
+.foto-strip{display:flex;gap:4px;overflow-x:auto;padding:8px 18px;scrollbar-width:none}
+.foto-strip::-webkit-scrollbar{display:none}
+.foto-thumb{
+  width:44px;height:44px;border-radius:6px;object-fit:cover;
+  flex-shrink:0;border:1px solid var(--border);cursor:pointer;transition:transform .2s;
+}
+.foto-thumb:hover{transform:scale(1.08)}
+.parte-foot{
+  padding:10px 18px;border-top:1px solid var(--border);
+  display:flex;align-items:center;justify-content:space-between;background:var(--bg3);
+}
+.urgente-tag{
+  font-size:9px;font-weight:800;
+  background:rgba(239,68,68,.2);color:var(--danger);
+  padding:2px 7px;border-radius:20px;text-transform:uppercase;letter-spacing:1px;
+}
+
+/* ── FILTERS ── */
+.filters{display:flex;gap:10px;margin-bottom:18px;flex-wrap:wrap;align-items:center}
+.search-box{
+  flex:1;min-width:180px;
+  background:var(--surface);border:1px solid var(--border);
+  border-radius:9px;padding:9px 14px;color:var(--text);
+  font-family:var(--font);font-size:13px;
+}
+.search-box:focus{outline:none;border-color:var(--accent)}
+.search-box::placeholder{color:var(--text3)}
+select.fsel{
+  background:var(--surface);border:1px solid var(--border);
+  border-radius:9px;padding:9px 12px;color:var(--text);
+  font-family:var(--font);font-size:12px;cursor:pointer;
+}
+select.fsel:focus{outline:none;border-color:var(--accent)}
+
+/* ── MODAL ── */
+.modal-overlay{
+  position:fixed;inset:0;background:rgba(0,0,0,.75);
+  backdrop-filter:blur(8px);z-index:1000;
+  display:none;align-items:flex-start;justify-content:center;
+  padding:20px;overflow-y:auto;
+}
+.modal-overlay.open{display:flex}
+.modal{
+  background:var(--bg2);border:1px solid var(--border);
+  border-radius:20px;width:100%;max-width:820px;margin:auto;
+  animation:slideUp .25s ease;
+}
+@keyframes slideUp{from{opacity:0;transform:translateY(24px)}to{opacity:1;transform:translateY(0)}}
+.modal-hdr{
+  padding:22px 26px 18px;border-bottom:1px solid var(--border);
+  display:flex;align-items:center;justify-content:space-between;
+}
+.modal-title{font-size:18px;font-weight:800}
+.modal-close{
+  width:32px;height:32px;border-radius:8px;
+  background:var(--surface);border:none;color:var(--text2);
+  cursor:pointer;font-size:16px;display:flex;align-items:center;justify-content:center;
+  transition:all .15s;
+}
+.modal-close:hover{background:var(--danger);color:#fff}
+.modal-body{padding:26px}
+.modal-foot{
+  padding:18px 26px;border-top:1px solid var(--border);
+  display:flex;gap:10px;justify-content:flex-end;
+}
+
+/* ── TABS ── */
+.tabs{display:flex;gap:3px;margin-bottom:22px;border-bottom:1px solid var(--border);padding-bottom:0}
+.tab{
+  padding:8px 15px;border-radius:8px 8px 0 0;cursor:pointer;
+  font-size:12px;font-weight:700;color:var(--text2);transition:all .15s;
+  border-bottom:2px solid transparent;margin-bottom:-1px;
+}
+.tab.active{color:var(--text);border-bottom-color:var(--accent)}
+.tab-content{display:none}.tab-content.active{display:block}
+
+/* ── FORM ── */
+.form-grid{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+.fg{display:flex;flex-direction:column;gap:5px}
+.fg.full{grid-column:1/-1}
+label{font-size:11px;font-weight:700;color:var(--text2);text-transform:uppercase;letter-spacing:.5px}
+input,textarea,select{
+  background:var(--surface);border:1px solid var(--border);border-radius:9px;
+  padding:9px 12px;color:var(--text);font-family:var(--font);font-size:13px;
+  transition:border-color .15s;width:100%;
+}
+input:focus,textarea:focus,select:focus{outline:none;border-color:var(--accent);box-shadow:0 0 0 3px rgba(61,126,255,.1)}
+textarea{resize:vertical;min-height:80px}
+
+/* ── UPLOAD ── */
+.upload-zone{
+  border:2px dashed var(--border);border-radius:12px;padding:28px;
+  text-align:center;cursor:pointer;transition:all .2s;position:relative;
+}
+.upload-zone:hover,.upload-zone.drag{border-color:var(--accent);background:rgba(61,126,255,.04)}
+.upload-zone input{position:absolute;inset:0;opacity:0;cursor:pointer}
+
+/* ── FOTO GALLERY ── */
+.fotos-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(130px,1fr));gap:10px}
+.foto-item{
+  position:relative;border-radius:10px;overflow:hidden;
+  background:var(--bg3);border:1px solid var(--border);aspect-ratio:1;cursor:pointer;
+}
+.foto-item img{width:100%;height:100%;object-fit:cover;transition:transform .3s}
+.foto-item:hover img{transform:scale(1.06)}
+.foto-item-ov{
+  position:absolute;inset:0;
+  background:linear-gradient(to bottom,transparent,rgba(0,0,0,.7));
+  display:flex;flex-direction:column;justify-content:flex-end;
+  padding:8px;opacity:0;transition:opacity .2s;
+}
+.foto-item:hover .foto-item-ov{opacity:1}
+.foto-tipo-tag{font-size:9px;font-weight:800;text-transform:uppercase;background:var(--accent);color:#fff;padding:2px 5px;border-radius:4px;width:fit-content;margin-bottom:3px}
+.foto-del{
+  position:absolute;top:5px;right:5px;width:22px;height:22px;
+  border-radius:5px;background:var(--danger);border:none;color:#fff;
+  cursor:pointer;font-size:11px;display:flex;align-items:center;justify-content:center;
+  opacity:0;transition:opacity .2s;
+}
+.foto-item:hover .foto-del{opacity:1}
+
+/* ── LIGHTBOX ── */
+.lightbox{
+  position:fixed;inset:0;z-index:2000;background:rgba(0,0,0,.95);
+  display:none;align-items:center;justify-content:center;padding:20px;
+}
+.lightbox.open{display:flex}
+.lightbox img{max-width:90vw;max-height:85vh;border-radius:12px;object-fit:contain}
+.lb-close{
+  position:absolute;top:18px;right:18px;width:40px;height:40px;border-radius:9px;
+  background:rgba(255,255,255,.1);border:none;color:#fff;font-size:20px;
+  cursor:pointer;display:flex;align-items:center;justify-content:center;transition:background .15s;
+}
+.lb-close:hover{background:var(--danger)}
+.lb-nav{
+  position:absolute;top:50%;transform:translateY(-50%);
+  width:40px;height:40px;border-radius:9px;background:rgba(255,255,255,.1);
+  border:none;color:#fff;font-size:20px;cursor:pointer;
+  display:flex;align-items:center;justify-content:center;transition:all .15s;
+}
+.lb-nav:hover{background:var(--accent)}
+.lb-prev{left:18px}.lb-next{right:18px}
+.lb-info{
+  position:absolute;bottom:18px;left:50%;transform:translateX(-50%);
+  background:rgba(0,0,0,.6);padding:6px 14px;border-radius:7px;
+  font-size:12px;color:var(--text2);white-space:nowrap;
+}
+
+/* ── AI PANEL ── */
+.ai-panel{
+  background:linear-gradient(135deg,rgba(61,126,255,.08),rgba(0,229,192,.04));
+  border:1px solid rgba(61,126,255,.25);border-radius:14px;padding:18px;margin-top:14px;
+}
+.ai-result-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(140px,1fr));gap:10px;margin-top:14px}
+.ai-metric{background:var(--bg3);border:1px solid var(--border);border-radius:9px;padding:12px}
+.ai-ml{font-size:10px;color:var(--text2);text-transform:uppercase;letter-spacing:.8px;margin-bottom:4px}
+.ai-mv{font-size:20px;font-weight:800;font-family:var(--mono)}
+.ai-ms{font-size:11px;color:var(--text2);margin-top:1px}
+.desg-item{display:flex;justify-content:space-between;align-items:center;padding:7px 0;border-bottom:1px solid var(--border);font-size:12px}
+.desg-item:last-child{border-bottom:none}
+.spinner{width:18px;height:18px;border-radius:50%;border:2px solid var(--border);border-top-color:var(--accent);animation:spin .7s linear infinite;flex-shrink:0}
+@keyframes spin{to{transform:rotate(360deg)}}
+.conf-alta{background:rgba(34,197,94,.2);color:var(--success)}
+.conf-media{background:rgba(251,191,36,.2);color:var(--warn)}
+.conf-baja{background:rgba(239,68,68,.2);color:var(--danger)}
+.conf-badge{display:inline-flex;align-items:center;gap:3px;font-size:10px;font-weight:800;padding:2px 8px;border-radius:20px}
+
+/* ── ADMIN TABLES ── */
+.data-table{width:100%;border-collapse:collapse;font-size:13px}
+.data-table th{padding:10px 14px;text-align:left;font-size:10px;text-transform:uppercase;letter-spacing:1px;color:var(--text2);border-bottom:1px solid var(--border)}
+.data-table td{padding:12px 14px;border-bottom:1px solid rgba(37,48,72,.5)}
+.data-table tr:last-child td{border-bottom:none}
+.data-table tr:hover td{background:var(--surface)}
+.rol-badge{font-size:10px;font-weight:800;padding:2px 8px;border-radius:20px;text-transform:uppercase}
+.rol-admin{background:rgba(0,229,192,.15);color:var(--accent2)}
+.rol-operario{background:rgba(61,126,255,.15);color:var(--accent)}
+.status-dot{display:inline-block;width:7px;height:7px;border-radius:50%;margin-right:5px}
+.dot-active{background:var(--success)}.dot-inactive{background:var(--danger)}
+
+/* ── DETAIL ── */
+.detail-section{background:var(--surface);border:1px solid var(--border);border-radius:var(--r2);padding:18px;margin-bottom:14px}
+.detail-section-title{font-size:11px;font-weight:800;text-transform:uppercase;letter-spacing:1px;color:var(--text2);margin-bottom:12px;display:flex;align-items:center;gap:7px}
+.detail-row{display:flex;justify-content:space-between;align-items:baseline;padding:7px 0;border-bottom:1px solid rgba(37,48,72,.5);font-size:13px}
+.detail-row:last-child{border-bottom:none}
+.dk{color:var(--text2)}.dv{font-weight:600;text-align:right;max-width:60%}
+
+/* ── TOASTS ── */
+.toast-box{position:fixed;bottom:22px;right:22px;z-index:9999;display:flex;flex-direction:column;gap:7px}
+.toast{
+  padding:11px 18px;border-radius:9px;font-size:13px;font-weight:600;
+  display:flex;align-items:center;gap:9px;
+  animation:toastIn .25s ease;min-width:200px;max-width:340px;box-shadow:var(--shadow);
+}
+@keyframes toastIn{from{opacity:0;transform:translateX(24px)}to{opacity:1;transform:translateX(0)}}
+.toast-success{background:var(--success);color:#052e16}
+.toast-error{background:var(--danger);color:#fff}
+.toast-info{background:var(--accent);color:#fff}
+.toast-warn{background:var(--warn);color:#451a03}
+
+/* ── EMPTY ── */
+.empty{text-align:center;padding:50px 20px;color:var(--text2)}
+.empty-icon{font-size:48px;margin-bottom:14px;opacity:.35}
+.empty-title{font-size:18px;font-weight:800;color:var(--text);margin-bottom:7px}
+.empty-desc{font-size:13px;max-width:280px;margin:0 auto 20px}
+
+/* ── CONFIG SECTION ── */
+.config-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:16px}
+.config-card{background:var(--surface);border:1px solid var(--border);border-radius:var(--r2);padding:20px}
+.config-card-title{font-size:13px;font-weight:800;margin-bottom:14px;display:flex;align-items:center;gap:8px}
+
+/* ── DIVIDER ── */
+hr{border:none;border-top:1px solid var(--border);margin:18px 0}
+
+/* ── RESPONSIVE ── */
+@media(max-width:768px){
+  .sidebar{transform:translateX(-100%)}
+  .sidebar.open{transform:translateX(0)}
+  .main{margin-left:0}
+  .form-grid{grid-template-columns:1fr}
+  .partes-grid{grid-template-columns:1fr}
+  .topbar{padding:12px 16px}
+  .page{padding:16px}
+  .menu-toggle{display:flex}
+  .modal{margin:10px auto}
+}
+</style>
+</head>
+<body>
+
+<!-- ======================================================== -->
+<!-- LOGIN -->
+<!-- ======================================================== -->
+<div id="screen-login">
+  <div class="login-card">
+    <div class="login-logo">
+      <div class="mark">⚡ MaGu Multiservicios</div>
+      <div class="sub">Formentera, Baleares — Partes de Trabajo</div>
+    </div>
+    <div class="login-error" id="login-error"></div>
+    <div class="fg" style="margin-bottom:14px">
+      <label>Email</label>
+      <input type="email" id="login-email" placeholder="admin@magu.es" autocomplete="email">
+    </div>
+    <div class="fg" style="margin-bottom:22px">
+      <label>Contraseña</label>
+      <input type="password" id="login-password" placeholder="••••••••" autocomplete="current-password">
+    </div>
+    <button class="btn btn-primary" style="width:100%;justify-content:center;padding:12px" id="btn-login" onclick="doLogin()">
+      Entrar
+    </button>
+    <div style="text-align:center;margin-top:18px;font-size:11px;color:var(--text3)">
+      Admin por defecto: <a href="/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="1677727b7f78567b777163387365">[email&#160;protected]</a> / Admin2024!
+    </div>
+  </div>
+</div>
+
+<!-- ======================================================== -->
+<!-- APP (after login) -->
+<!-- ======================================================== -->
+<div id="screen-app" style="display:none">
+
+<!-- SIDEBAR -->
+<aside class="sidebar" id="sidebar">
+  <div class="logo">
+    <div class="logo-mark" id="sidebar-logo">⚡ MaGu</div>
+    <div class="logo-sub">Multiservicios S.L.</div>
+  </div>
+  <nav>
+    <div class="nav-section">
+      <div class="nav-lbl">Principal</div>
+      <div class="nav-item active" onclick="showPage('dashboard')">
+        <span class="nav-icon">📊</span> Dashboard
+      </div>
+      <div class="nav-item" onclick="showPage('partes')">
+        <span class="nav-icon">📋</span> Partes
+        <span class="nav-badge" id="badge-pend">0</span>
+      </div>
+    </div>
+    <div class="nav-section">
+      <div class="nav-lbl">Gestión</div>
+      <div class="nav-item" onclick="showPage('calendario')">
+        <span class="nav-icon">📅</span> Calendario
+      </div>
+    </div>
+    <!-- Admin only -->
+    <div class="nav-section" id="nav-admin" style="display:none">
+      <div class="nav-lbl">Administración</div>
+      <div class="nav-item" onclick="showPage('operarios')">
+        <span class="nav-icon">👥</span> Operarios
+      </div>
+      <div class="nav-item" onclick="showPage('admin-config')">
+        <span class="nav-icon">⚙️</span> Configuración
+      </div>
+    </div>
+  </nav>
+  <div class="sidebar-footer">
+    <div class="user-card" onclick="showPage('mi-cuenta')">
+      <div class="avatar" id="sidebar-avatar">?</div>
+      <div class="user-info">
+        <div class="name" id="sidebar-name">...</div>
+        <div class="role" id="sidebar-role">...</div>
+      </div>
+    </div>
+  </div>
+</aside>
+
+<!-- MAIN -->
+<main class="main">
+  <div class="topbar">
+    <button class="menu-toggle" onclick="toggleSidebar()">☰</button>
+    <div class="topbar-title" id="page-title">Dashboard</div>
+    <div id="topbar-actions"></div>
+  </div>
+
+  <!-- DASHBOARD -->
+  <div class="page active" id="page-dashboard">
+    <div class="stats-grid" id="stats-grid">
+      <div class="stat-card blue"><div class="stat-lbl">Total</div><div class="stat-val" id="s-total">–</div><div class="stat-icon">📋</div></div>
+      <div class="stat-card yellow"><div class="stat-lbl">Pendientes</div><div class="stat-val" id="s-pend">–</div><div class="stat-icon">⏳</div></div>
+      <div class="stat-card blue"><div class="stat-lbl">En progreso</div><div class="stat-val" id="s-prog">–</div><div class="stat-icon">🔧</div></div>
+      <div class="stat-card green"><div class="stat-lbl">Completados</div><div class="stat-val" id="s-comp">–</div><div class="stat-icon">✅</div></div>
+      <div class="stat-card red"><div class="stat-lbl">Urgentes</div><div class="stat-val" id="s-urg">–</div><div class="stat-icon">🚨</div></div>
+      <div class="stat-card teal" id="stat-fotos-card"><div class="stat-lbl">Fotos</div><div class="stat-val" id="s-foto">–</div><div class="stat-icon">📸</div></div>
+    </div>
+    <div class="section-hdr">
+      <div class="section-title">Partes recientes</div>
+      <button class="btn btn-ghost btn-sm" onclick="showPage('partes')">Ver todos →</button>
+    </div>
+    <div class="partes-grid" id="dash-partes"></div>
+  </div>
+
+  <!-- PARTES -->
+  <div class="page" id="page-partes">
+    <div class="filters">
+      <input class="search-box" type="text" placeholder="🔍 Buscar cliente, dirección..." id="fi-q" oninput="filterPartes()">
+      <select class="fsel" id="fi-estado" onchange="filterPartes()">
+        <option value="">Todos los estados</option>
+        <option value="pendiente">Pendiente</option>
+        <option value="en_progreso">En Progreso</option>
+        <option value="completado">Completado</option>
+        <option value="cancelado">Cancelado</option>
+      </select>
+      <select class="fsel" id="fi-tipo" onchange="filterPartes()">
+        <option value="">Todos los tipos</option>
+        <option value="electrico">⚡ Eléctrico</option>
+        <option value="telecomunicaciones">📡 Telecom</option>
+        <option value="hvac">❄️ HVAC</option>
+        <option value="mantenimiento">🔧 Mantenimiento</option>
+        <option value="averia">⚠️ Avería</option>
+        <option value="otro">📌 Otro</option>
+      </select>
+      <select class="fsel" id="fi-urgencia" onchange="filterPartes()">
+        <option value="">Toda urgencia</option>
+        <option value="urgente">🔴 Urgente</option>
+        <option value="normal">🟡 Normal</option>
+        <option value="baja">🟢 Baja</option>
+      </select>
+    </div>
+    <div class="partes-grid" id="partes-list"></div>
+  </div>
+
+  <!-- CALENDARIO -->
+  <div class="page" id="page-calendario">
+    <div class="detail-section" style="margin-bottom:18px">
+      <div class="detail-section-title">📅 Google Calendar</div>
+      <div style="display:flex;align-items:center;gap:14px;flex-wrap:wrap">
+        <div style="flex:1;font-size:13px;color:var(--text2)" id="gcal-status-txt">Conecta tu Google Calendar para sincronizar partes.</div>
+        <button class="btn btn-primary btn-sm" onclick="connectGoogle()">Conectar Google</button>
+      </div>
+      <div id="gcal-token-section" style="display:none;margin-top:14px">
+        <div class="fg">
+          <label>Access Token de Google</label>
+          <input type="text" id="google-token" placeholder="Pega el token aquí...">
+        </div>
+        <button class="btn btn-success btn-sm" style="margin-top:10px" onclick="saveGoogleToken()">💾 Guardar</button>
+      </div>
+    </div>
+    <div class="section-hdr"><div class="section-title">Partes programados</div></div>
+    <div id="cal-partes"></div>
+  </div>
+
+  <!-- OPERARIOS (Admin) -->
+  <div class="page" id="page-operarios">
+    <div class="detail-section">
+      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:16px">
+        <h3>Operarios y usuarios</h3>
+        <button class="btn btn-primary btn-sm" onclick="openNuevoOperario()">➕ Nuevo usuario</button>
+      </div>
+      <div style="overflow-x:auto">
+        <table class="data-table">
+          <thead>
+            <tr><th>Nombre</th><th>Email</th><th>Rol</th><th>Teléfono</th><th>Estado</th><th>Último acceso</th><th></th></tr>
+          </thead>
+          <tbody id="operarios-tbody"></tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+
+  <!-- CONFIG (Admin) -->
+  <div class="page" id="page-admin-config">
+    <div class="config-grid">
+      <div class="config-card">
+        <div class="config-card-title">🏢 Datos de empresa</div>
+        <div class="fg" style="margin-bottom:10px"><label>Nombre empresa</label><input type="text" id="cfg-nombre" placeholder="MaGu Multiservicios S.L."></div>
+        <div class="fg" style="margin-bottom:10px"><label>Teléfono</label><input type="tel" id="cfg-telefono" placeholder="+34 971 000 000"></div>
+        <div class="fg" style="margin-bottom:10px"><label>Email</label><input type="email" id="cfg-email" placeholder="info@magu.es"></div>
+        <div class="fg" style="margin-bottom:14px"><label>Dirección</label><input type="text" id="cfg-direccion" placeholder="Formentera, Baleares"></div>
+        <button class="btn btn-primary btn-sm" onclick="saveConfig()">💾 Guardar</button>
+      </div>
+      <div class="config-card">
+        <div class="config-card-title">💶 Tarifas y facturación</div>
+        <div class="fg" style="margin-bottom:10px">
+          <label>Tarifa por hora (€)</label>
+          <input type="number" id="cfg-tarifa" placeholder="45" step="1" min="1">
+          <small style="font-size:11px;color:var(--text2)">Usada para calcular el precio estimado con IA</small>
+        </div>
+        <button class="btn btn-primary btn-sm" style="margin-top:4px" onclick="saveConfig()">💾 Guardar</button>
+      </div>
+      <div class="config-card">
+        <div class="config-card-title">🔗 Backend API</div>
+        <div class="fg" style="margin-bottom:10px">
+          <label>URL del Backend</label>
+          <input type="text" id="cfg-api-url" placeholder="https://magu.railway.app">
+        </div>
+        <div id="conn-status" style="font-size:12px;color:var(--text2);padding:8px;background:var(--bg3);border-radius:8px;margin-bottom:10px">⏳ Sin verificar</div>
+        <div style="display:flex;gap:8px">
+          <button class="btn btn-ghost btn-sm" onclick="testConn()">🔗 Probar</button>
+          <button class="btn btn-primary btn-sm" onclick="saveApiUrl()">💾 Guardar URL</button>
+        </div>
+      </div>
+      <div class="config-card">
+        <div class="config-card-title">🤖 Inteligencia Artificial</div>
+        <div style="font-size:13px;color:var(--text2);line-height:1.7">
+          La estimación de tiempo usa <strong style="color:var(--text)">Claude AI</strong>.<br>
+          Configura la API key en las variables de entorno del backend:
+          <code style="display:block;margin-top:8px;background:var(--bg3);padding:8px;border-radius:6px;font-size:11px;color:var(--accent2)">ANTHROPIC_API_KEY=sk-ant-...</code>
+          Obtén la key en <a href="https://console.anthropic.com" target="_blank" style="color:var(--accent)">console.anthropic.com</a>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- MI CUENTA -->
+  <div class="page" id="page-mi-cuenta">
+    <div style="max-width:500px">
+      <div class="detail-section">
+        <div class="detail-section-title">👤 Mi perfil</div>
+        <div class="fg" style="margin-bottom:10px"><label>Nombre</label><input type="text" id="mc-nombre" placeholder="Tu nombre"></div>
+        <div class="fg" style="margin-bottom:10px"><label>Email</label><input type="email" id="mc-email" placeholder="email@magu.es" readonly style="opacity:.5;cursor:not-allowed"></div>
+        <div class="fg" style="margin-bottom:14px"><label>Teléfono</label><input type="tel" id="mc-telefono" placeholder="+34 666 000 000"></div>
+        <div style="display:flex;gap:10px">
+          <button class="btn btn-primary btn-sm" onclick="saveProfile()">💾 Guardar perfil</button>
+          <button class="btn btn-danger btn-sm" onclick="doLogout()">🚪 Cerrar sesión</button>
+        </div>
+      </div>
+      <div class="detail-section">
+        <div class="detail-section-title">🔑 Cambiar contraseña</div>
+        <div class="fg" style="margin-bottom:10px"><label>Contraseña actual</label><input type="password" id="pw-current" placeholder="••••••••"></div>
+        <div class="fg" style="margin-bottom:10px"><label>Nueva contraseña</label><input type="password" id="pw-new" placeholder="Mínimo 8 caracteres"></div>
+        <div class="fg" style="margin-bottom:14px"><label>Confirmar nueva</label><input type="password" id="pw-confirm" placeholder="Repite la contraseña"></div>
+        <button class="btn btn-warn btn-sm" onclick="changePassword()">🔑 Cambiar contraseña</button>
+      </div>
+    </div>
+  </div>
+
+</main>
+</div>
+
+<!-- ======================================================== -->
+<!-- MODAL NUEVO/EDITAR PARTE -->
+<!-- ======================================================== -->
+<div class="modal-overlay" id="modal-parte">
+  <div class="modal">
+    <div class="modal-hdr">
+      <div>
+        <div style="font-size:10px;color:var(--text2);font-family:var(--mono);margin-bottom:3px" id="mp-num"></div>
+        <div class="modal-title" id="mp-title">Nuevo Parte</div>
+      </div>
+      <button class="modal-close" onclick="closeModal('modal-parte')">✕</button>
+    </div>
+    <div class="modal-body">
+      <input type="hidden" id="p-id">
+      <div class="tabs">
+        <div class="tab active" data-tab="info" onclick="switchTab(this,'info')">📋 Información</div>
+        <div class="tab" data-tab="fotos" onclick="switchTab(this,'fotos')">📸 Fotos</div>
+        <div class="tab" data-tab="ai" onclick="switchTab(this,'ai')">🤖 IA</div>
+        <div class="tab" data-tab="cal" onclick="switchTab(this,'cal')">📅 Calendario</div>
+      </div>
+
+      <!-- INFO -->
+      <div class="tab-content active" id="tc-info">
+        <div class="form-grid">
+          <div class="fg"><label>Cliente *</label><input type="text" id="p-cliente" placeholder="Nombre del cliente"></div>
+          <div class="fg"><label>Teléfono</label><input type="tel" id="p-telefono" placeholder="+34 666 000 000"></div>
+          <div class="fg full"><label>Dirección</label><input type="text" id="p-direccion" placeholder="Calle, número, localidad..."></div>
+          <div class="fg"><label>Tipo de trabajo</label>
+            <select id="p-tipo">
+              <option value="electrico">⚡ Eléctrico</option>
+              <option value="telecomunicaciones">📡 Telecomunicaciones</option>
+              <option value="hvac">❄️ HVAC / Climatización</option>
+              <option value="mantenimiento">🔧 Mantenimiento</option>
+              <option value="averia">⚠️ Avería</option>
+              <option value="otro">📌 Otro</option>
+            </select>
+          </div>
+          <div class="fg"><label>Urgencia</label>
+            <select id="p-urgencia">
+              <option value="normal">🟡 Normal</option>
+              <option value="urgente">🔴 Urgente</option>
+              <option value="baja">🟢 Baja prioridad</option>
+            </select>
+          </div>
+          <div class="fg"><label>Estado</label>
+            <select id="p-estado">
+              <option value="pendiente">⏳ Pendiente</option>
+              <option value="en_progreso">🔧 En Progreso</option>
+              <option value="completado">✅ Completado</option>
+              <option value="cancelado">❌ Cancelado</option>
+            </select>
+          </div>
+          <div class="fg admin-only"><label>Asignado a</label>
+            <select id="p-asignado">
+              <option value="">Sin asignar</option>
+            </select>
+          </div>
+          <div class="fg full"><label>Título del trabajo</label><input type="text" id="p-titulo" placeholder="Ej: Instalación cuadro eléctrico vivienda"></div>
+          <div class="fg full"><label>Descripción</label><textarea id="p-desc" rows="4" placeholder="Describe el trabajo en detalle..."></textarea></div>
+          <div class="fg"><label>Horas estimadas</label><input type="number" id="p-hest" step="0.5" min="0" placeholder="0.0"></div>
+          <div class="fg"><label>Horas reales</label><input type="number" id="p-hreal" step="0.5" min="0" placeholder="0.0"></div>
+          <div class="fg full"><label>Materiales</label><textarea id="p-mat" rows="3" placeholder="Lista materiales..."></textarea></div>
+          <div class="fg full"><label>Observaciones</label><textarea id="p-obs" rows="2" placeholder="Notas adicionales..."></textarea></div>
+        </div>
+      </div>
+
+      <!-- FOTOS -->
+      <div class="tab-content" id="tc-fotos">
+        <div class="upload-zone" id="dropzone">
+          <input type="file" id="foto-input" multiple accept="image/*" onchange="handleFotoUpload(event)">
+          <div style="font-size:36px;margin-bottom:10px">📸</div>
+          <div style="font-size:14px;color:var(--text2)"><strong style="color:var(--accent)">Arrastra fotos</strong> o haz clic para seleccionar</div>
+          <div style="font-size:11px;color:var(--text3);margin-top:5px">Máx. 20 fotos · JPG, PNG, WEBP · 10MB cada una</div>
+        </div>
+        <div style="display:flex;gap:12px;margin-top:12px">
+          <div class="fg" style="flex:1"><label>Tipo de foto</label>
+            <select id="foto-tipo">
+              <option value="general">📷 General</option>
+              <option value="antes">🕐 Antes</option>
+              <option value="durante">⚙️ Durante</option>
+              <option value="despues">✅ Después</option>
+              <option value="problema">⚠️ Problema</option>
+              <option value="material">📦 Material</option>
+            </select>
+          </div>
+          <div class="fg" style="flex:2"><label>Descripción foto</label><input type="text" id="foto-desc" placeholder="Descripción..."></div>
+        </div>
+        <hr>
+        <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:12px">
+          <div style="font-size:14px;font-weight:700">Fotos <span id="fotos-count" style="color:var(--text2);font-weight:400">(0)</span></div>
+        </div>
+        <div class="fotos-grid" id="fotos-grid-modal"></div>
+      </div>
+
+      <!-- AI -->
+      <div class="tab-content" id="tc-ai">
+        <div class="ai-panel">
+          <div style="display:flex;align-items:center;gap:10px;margin-bottom:14px">
+            <span style="font-size:24px">🤖</span>
+            <div>
+              <div style="font-size:14px;font-weight:800">Estimación con Claude AI</div>
+              <div style="font-size:11px;color:var(--text2)">Analiza descripción y fotos para estimar tiempos y materiales</div>
+            </div>
+          </div>
+          <button class="btn btn-primary" id="btn-estimar" onclick="estimarIA()">🤖 Calcular estimación</button>
+          <div id="ai-loading" style="display:none;align-items:center;gap:10px;padding:12px;color:var(--text2)">
+            <div class="spinner"></div><span>Analizando con IA...</span>
+          </div>
+          <div id="ai-resultado" style="display:none">
+            <div class="ai-result-grid" id="ai-metrics"></div>
+            <div style="margin-top:14px">
+              <div style="font-size:11px;font-weight:800;text-transform:uppercase;letter-spacing:1px;color:var(--text2);margin-bottom:8px">Desglose de fases</div>
+              <div id="ai-desglose"></div>
+            </div>
+            <div style="margin-top:12px" id="ai-mat-sec">
+              <div style="font-size:11px;font-weight:800;text-transform:uppercase;letter-spacing:1px;color:var(--text2);margin-bottom:6px">Materiales estimados</div>
+              <div id="ai-mat" style="font-size:12px;color:var(--text2);line-height:1.8"></div>
+            </div>
+            <div style="margin-top:12px" id="ai-notas-sec">
+              <div style="font-size:11px;font-weight:800;text-transform:uppercase;letter-spacing:1px;color:var(--text2);margin-bottom:6px">Notas</div>
+              <div id="ai-notas" style="font-size:12px;padding:10px;background:var(--bg3);border-radius:8px;border:1px solid var(--border)"></div>
+            </div>
+            <div style="margin-top:12px" id="ai-risk-sec">
+              <div style="font-size:11px;font-weight:800;text-transform:uppercase;letter-spacing:1px;color:var(--warn);margin-bottom:6px">⚠️ Factores de riesgo</div>
+              <div id="ai-risk" style="font-size:12px;color:var(--warn)"></div>
+            </div>
+            <div style="display:flex;gap:10px;margin-top:14px">
+              <button class="btn btn-success btn-sm" onclick="aplicarIA()">✅ Aplicar al parte</button>
+              <button class="btn btn-ghost btn-sm" onclick="estimarIA()">🔄 Recalcular</button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- CALENDAR -->
+      <div class="tab-content" id="tc-cal">
+        <div id="cal-no-token" style="text-align:center;padding:32px;color:var(--text2)">
+          <div style="font-size:36px;margin-bottom:10px">📅</div>
+          <div style="margin-bottom:14px">Conecta Google Calendar desde la sección Calendario</div>
+          <button class="btn btn-ghost btn-sm" onclick="showPage('calendario');closeModal('modal-parte')">Ir a Calendario →</button>
+        </div>
+        <div id="cal-with-token" style="display:none">
+          <div class="form-grid">
+            <div class="fg"><label>Fecha inicio</label><input type="date" id="cal-fi"></div>
+            <div class="fg"><label>Hora inicio</label><input type="time" id="cal-hi" value="09:00"></div>
+            <div class="fg"><label>Fecha fin</label><input type="date" id="cal-ff"></div>
+            <div class="fg"><label>Hora fin</label><input type="time" id="cal-hf" value="11:00"></div>
+            <div class="fg full"><label>Calendario</label><select id="cal-id"><option value="primary">Principal</option></select></div>
+          </div>
+          <button class="btn btn-primary" style="margin-top:12px" onclick="crearEvento()">📅 Añadir a Google Calendar</button>
+          <div id="cal-link-box" style="display:none;margin-top:10px">
+            <a id="cal-link-a" href="#" target="_blank" class="btn btn-ghost btn-sm">🔗 Ver evento en Google →</a>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="modal-foot">
+      <button class="btn btn-ghost" onclick="closeModal('modal-parte')">Cancelar</button>
+      <button class="btn btn-primary" onclick="guardarParte()" id="btn-guardar-parte">💾 Guardar parte</button>
+    </div>
+  </div>
+</div>
+
+<!-- MODAL DETALLE -->
+<div class="modal-overlay" id="modal-detalle">
+  <div class="modal" style="max-width:880px">
+    <div class="modal-hdr">
+      <div>
+        <div style="font-size:10px;color:var(--text2);font-family:var(--mono);margin-bottom:3px" id="d-num"></div>
+        <div class="modal-title" id="d-title"></div>
+      </div>
+      <button class="modal-close" onclick="closeModal('modal-detalle')">✕</button>
+    </div>
+    <div class="modal-body" id="d-body"></div>
+    <div class="modal-foot">
+      <button class="btn btn-ghost" onclick="closeModal('modal-detalle')">Cerrar</button>
+      <button class="btn btn-ghost" id="btn-edit-det" onclick="editFromDetail()">✏️ Editar</button>
+      <button class="btn btn-danger btn-sm admin-only" id="btn-del-det">🗑️ Eliminar</button>
+    </div>
+  </div>
+</div>
+
+<!-- MODAL NUEVO/EDITAR OPERARIO -->
+<div class="modal-overlay" id="modal-operario">
+  <div class="modal" style="max-width:480px">
+    <div class="modal-hdr">
+      <div class="modal-title" id="mo-title">Nuevo operario</div>
+      <button class="modal-close" onclick="closeModal('modal-operario')">✕</button>
+    </div>
+    <div class="modal-body">
+      <input type="hidden" id="op-id">
+      <div class="form-grid">
+        <div class="fg full"><label>Nombre completo *</label><input type="text" id="op-nombre" placeholder="Nombre Apellido"></div>
+        <div class="fg"><label>Email *</label><input type="email" id="op-email" placeholder="email@magu.es"></div>
+        <div class="fg"><label>Teléfono</label><input type="tel" id="op-tel" placeholder="+34 666 000 000"></div>
+        <div class="fg"><label>Rol</label>
+          <select id="op-rol">
+            <option value="operario">🔧 Operario</option>
+            <option value="admin">👑 Admin</option>
+          </select>
+        </div>
+        <div class="fg"><label>Estado</label>
+          <select id="op-activo">
+            <option value="true">✅ Activo</option>
+            <option value="false">❌ Inactivo</option>
+          </select>
+        </div>
+        <div class="fg full" id="op-pw-group"><label>Contraseña *</label><input type="password" id="op-pw" placeholder="Mínimo 8 caracteres"></div>
+        <div class="fg full" id="op-pw-change"><label>Nueva contraseña (dejar vacío para no cambiar)</label><input type="password" id="op-pw2" placeholder="••••••••"></div>
+      </div>
+    </div>
+    <div class="modal-foot">
+      <button class="btn btn-ghost" onclick="closeModal('modal-operario')">Cancelar</button>
+      <button class="btn btn-primary" onclick="guardarOperario()">💾 Guardar</button>
+    </div>
+  </div>
+</div>
+
+<!-- LIGHTBOX -->
+<div class="lightbox" id="lightbox">
+  <button class="lb-close" onclick="closeLB()">✕</button>
+  <button class="lb-nav lb-prev" onclick="lbNav(-1)">‹</button>
+  <img id="lb-img" src="" alt="">
+  <button class="lb-nav lb-next" onclick="lbNav(1)">›</button>
+  <div class="lb-info" id="lb-info"></div>
+</div>
+
+<!-- TOASTS -->
+<div class="toast-box" id="toast-box"></div>
+
+<!-- ======================================================== -->
+<!-- SCRIPT -->
+<!-- ======================================================== -->
+<script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script>
+// ── CONFIG ───────────────────────────────────────────────────
+let API = localStorage.getItem('magu_api') || 'https://magu-backend-production.up.railway.app';
+let TOKEN = localStorage.getItem('magu_token') || '';
+let ME = null;
+let allPartes = [];
+let allOperarios = [];
+let lbImages = [], lbIdx = 0;
+let aiEst = null;
+let currentParteId = null;
+let currentDetailId = null;
+let googleToken = localStorage.getItem('magu_gtoken') || '';
+
+// ── API HELPER ────────────────────────────────────────────────
+async function api(method, path, body=null, isForm=false) {
+  const opts = { method, headers: { Authorization: `Bearer ${TOKEN}` } };
+  if (body && !isForm) { opts.headers['Content-Type'] = 'application/json'; opts.body = JSON.stringify(body); }
+  else if (isForm) { opts.body = body; }
+  const r = await fetch(API + path, opts);
+  if (r.status === 401) { doLogout(); throw new Error('Sesión expirada'); }
+  const data = await r.json().catch(() => ({}));
+  if (!r.ok) throw new Error(data.error || `HTTP ${r.status}`);
+  return data;
+}
+
+// ── AUTH ─────────────────────────────────────────────────────
+async function doLogin() {
+  const email = document.getElementById('login-email').value.trim();
+  const pw = document.getElementById('login-password').value;
+  const btn = document.getElementById('btn-login');
+  const err = document.getElementById('login-error');
+  err.style.display = 'none';
+  btn.disabled = true; btn.textContent = 'Entrando...';
+  try {
+    const { token, user } = await fetch(API + '/api/auth/login', {
+      method: 'POST', headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ email, password: pw })
+    }).then(r => r.json().then(d => { if (!r.ok) throw new Error(d.error); return d; }));
+    TOKEN = token; ME = user;
+    localStorage.setItem('magu_token', token);
+    initApp();
+  } catch(e) {
+    err.textContent = e.message || 'Email o contraseña incorrectos';
+    err.style.display = 'block';
+  } finally { btn.disabled = false; btn.textContent = 'Entrar'; }
+}
+
+document.getElementById('login-password').addEventListener('keydown', e => { if (e.key === 'Enter') doLogin(); });
+document.getElementById('login-email').addEventListener('keydown', e => { if (e.key === 'Enter') doLogin(); });
+
+function doLogout() {
+  TOKEN = ''; ME = null;
+  localStorage.removeItem('magu_token');
+  document.getElementById('screen-app').style.display = 'none';
+  document.getElementById('screen-login').style.display = 'flex';
+}
+
+async function initApp() {
+  document.getElementById('screen-login').style.display = 'none';
+  document.getElementById('screen-app').style.display = 'block';
+  updateSidebar();
+  document.getElementById('cfg-api-url').value = API;
+  await loadDashboard();
+  await loadOperarios();
+}
+
+function updateSidebar() {
+  if (!ME) return;
+  document.getElementById('sidebar-name').textContent = ME.nombre;
+  const rol = document.getElementById('sidebar-role');
+  rol.textContent = ME.rol;
+  rol.className = 'role ' + ME.rol;
+  document.getElementById('sidebar-avatar').textContent = ME.nombre.charAt(0).toUpperCase();
+  if (ME.rol === 'admin') {
+    document.getElementById('nav-admin').style.display = 'block';
+    document.querySelectorAll('.admin-only').forEach(el => el.style.display = '');
+  } else {
+    document.querySelectorAll('.admin-only').forEach(el => el.style.display = 'none');
+  }
+  // Update topbar action
+  document.getElementById('topbar-actions').innerHTML = ME.rol === 'admin'
+    ? `<button class="btn btn-primary" onclick="openNuevoParte()">➕ Nuevo Parte</button>` : '';
+  // Populate mi-cuenta
+  document.getElementById('mc-nombre').value = ME.nombre || '';
+  document.getElementById('mc-email').value = ME.email || '';
+  document.getElementById('mc-telefono').value = ME.telefono || '';
+}
+
+// ── NAVIGATION ────────────────────────────────────────────────
+function showPage(name) {
+  document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+  document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
+  const page = document.getElementById(`page-${name}`);
+  if (page) page.classList.add('active');
+  document.querySelector(`[onclick="showPage('${name}')"]`)?.classList.add('active');
+  const titles = { dashboard:'Dashboard', partes:'Partes de Trabajo', calendario:'Calendario', operarios:'Operarios', 'admin-config':'Configuración', 'mi-cuenta':'Mi Cuenta' };
+  document.getElementById('page-title').textContent = titles[name] || name;
+  if (window.innerWidth <= 768) document.getElementById('sidebar').classList.remove('open');
+  if (name === 'dashboard') loadDashboard();
+  if (name === 'partes') loadPartes();
+  if (name === 'operarios') loadOperarios();
+  if (name === 'admin-config') loadConfig();
+  if (name === 'calendario') loadCalendario();
+}
+
+function toggleSidebar() { document.getElementById('sidebar').classList.toggle('open'); }
+
+function switchTab(el, tab) {
+  el.closest('.modal-body').querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+  el.closest('.modal-body').querySelectorAll('.tab-content').forEach(t => t.classList.remove('active'));
+  el.classList.add('active');
+  document.getElementById(`tc-${tab}`).classList.add('active');
+  if (tab === 'fotos' && currentParteId) loadFotos(currentParteId);
+}
+
+// ── DASHBOARD ─────────────────────────────────────────────────
+async function loadDashboard() {
+  try {
+    const stats = await api('GET', '/api/stats');
+    document.getElementById('s-total').textContent = stats.total;
+    document.getElementById('s-pend').textContent = stats.pendientes;
+    document.getElementById('s-prog').textContent = stats.en_progreso;
+    document.getElementById('s-comp').textContent = stats.completados;
+    document.getElementById('s-urg').textContent = stats.urgentes;
+    document.getElementById('s-foto').textContent = stats.fotos_total;
+    document.getElementById('badge-pend').textContent = stats.pendientes;
+    if (ME?.rol !== 'admin') document.getElementById('stat-fotos-card').style.display = 'none';
+
+    allPartes = await api('GET', '/api/partes');
+    renderCards(allPartes.slice(0,6), 'dash-partes');
+  } catch(e) { toast('Error conectando al servidor. Configura la URL del backend.','error'); }
+}
+
+// ── PARTES LIST ───────────────────────────────────────────────
+async function loadPartes() {
+  try {
+    allPartes = await api('GET', '/api/partes');
+    filterPartes();
+  } catch(e) { toast('Error cargando partes','error'); }
+}
+
+function filterPartes() {
+  const q = (document.getElementById('fi-q')?.value||'').toLowerCase();
+  const es = document.getElementById('fi-estado')?.value||'';
+  const ti = document.getElementById('fi-tipo')?.value||'';
+  const ur = document.getElementById('fi-urgencia')?.value||'';
+  const f = allPartes.filter(p =>
+    (!q || [p.cliente,p.titulo,p.descripcion,p.direccion,p.numero].some(v=>v?.toLowerCase().includes(q))) &&
+    (!es || p.estado===es) && (!ti || p.tipo_trabajo===ti) && (!ur || p.urgencia===ur)
+  );
+  renderCards(f, 'partes-list');
+}
+
+function renderCards(partes, cid) {
+  const c = document.getElementById(cid);
+  if (!c) return;
+  if (!partes.length) {
+    c.innerHTML = `<div class="empty" style="grid-column:1/-1">
+      <div class="empty-icon">📋</div>
+      <div class="empty-title">Sin partes</div>
+      <div class="empty-desc">${ME?.rol==='admin' ? 'Crea el primer parte haciendo clic en "Nuevo Parte"' : 'No tienes partes asignados'}</div>
+      ${ME?.rol==='admin' ? `<button class="btn btn-primary" onclick="openNuevoParte()">➕ Nuevo Parte</button>` : ''}
+    </div>`;
+    return;
+  }
+  const icons = { electrico:'⚡', telecomunicaciones:'📡', hvac:'❄️', mantenimiento:'🔧', averia:'⚠️', otro:'📌' };
+  c.innerHTML = partes.map(p => {
+    const strip = p.fotos?.length ? `<div class="foto-strip">${p.fotos.slice(0,8).map(f=>`<img class="foto-thumb" src="${f.url}" onclick="event.stopPropagation();openLBFromCard('${p.id}','${f.id}')">`).join('')}</div>` : '';
+    const fecha = new Date(p.creado_en).toLocaleDateString('es-ES',{day:'2-digit',month:'2-digit',year:'2-digit'});
+    const asg = p.asignado?.nombre ? `👷 ${p.asignado.nombre}` : '';
+    return `<div class="parte-card" onclick="openDetalle('${p.id}')">
+      <div class="parte-card-head">
+        <div><div class="parte-num">${p.numero}</div><div class="parte-tit">${p.titulo||p.descripcion?.substring(0,50)||'Sin título'}</div></div>
+        <span class="estado-badge eb-${p.estado}">${p.estado?.replace('_',' ')}</span>
+      </div>
+      <div style="padding:12px 18px">
+        <div class="parte-meta">
+          <span>👤 ${p.cliente||'Sin cliente'}</span>
+          <span>${icons[p.tipo_trabajo]||'📋'} ${p.tipo_trabajo||'—'}</span>
+          <span>📅 ${fecha}</span>
+          ${asg?`<span>${asg}</span>`:''}
+        </div>
+        ${p.direccion?`<div style="font-size:11px;color:var(--text2);margin-top:5px">📍 ${p.direccion}</div>`:''}
+      </div>
+      ${strip}
+      <div class="parte-foot">
+        <div style="font-size:11px;color:var(--text2)">📸 ${p.fotos?.length||0} foto${p.fotos?.length!==1?'s':''}</div>
+        <div style="display:flex;gap:6px;align-items:center">
+          ${p.google_event_link?`<a href="${p.google_event_link}" target="_blank" onclick="event.stopPropagation()" style="font-size:10px;color:var(--accent2);text-decoration:none">📅</a>`:''}
+          ${p.urgencia==='urgente'?`<span class="urgente-tag">🚨 Urgente</span>`:''}
+          ${p.horas_estimadas?`<span style="font-size:11px;color:var(--text2)">⏱ ${p.horas_estimadas}h</span>`:''}
+        </div>
+      </div>
+    </div>`;
+  }).join('');
+}
+
+// ── MODAL NUEVO/EDITAR PARTE ──────────────────────────────────
+function openNuevoParte() {
+  if (ME?.rol !== 'admin') return;
+  currentParteId = null;
+  document.getElementById('mp-title').textContent = 'Nuevo Parte de Trabajo';
+  document.getElementById('mp-num').textContent = '';
+  ['p-id','p-cliente','p-telefono','p-direccion','p-titulo','p-desc','p-mat','p-obs','p-hest','p-hreal'].forEach(id=>{ const el=document.getElementById(id); if(el) el.value=''; });
+  document.getElementById('p-estado').value = 'pendiente';
+  document.getElementById('p-urgencia').value = 'normal';
+  document.getElementById('p-tipo').value = 'electrico';
+  document.getElementById('p-asignado').value = '';
+  resetFotosTab(); resetAI(); resetCalTab();
+  populateAsignado();
+  // First tab
+  activateFirstTab('modal-parte');
+  openModal('modal-parte');
+}
+
+async function openEditParte(id) {
+  try {
+    const p = await api('GET', `/api/partes/${id}`);
+    currentParteId = id;
+    document.getElementById('mp-title').textContent = `Editar ${p.numero}`;
+    document.getElementById('mp-num').textContent = p.numero;
+    document.getElementById('p-id').value = p.id;
+    document.getElementById('p-cliente').value = p.cliente||'';
+    document.getElementById('p-telefono').value = p.telefono||'';
+    document.getElementById('p-direccion').value = p.direccion||'';
+    document.getElementById('p-titulo').value = p.titulo||'';
+    document.getElementById('p-tipo').value = p.tipo_trabajo||'electrico';
+    document.getElementById('p-urgencia').value = p.urgencia||'normal';
+    document.getElementById('p-estado').value = p.estado||'pendiente';
+    document.getElementById('p-desc').value = p.descripcion||'';
+    document.getElementById('p-mat').value = p.materiales||'';
+    document.getElementById('p-obs').value = p.observaciones||'';
+    document.getElementById('p-hest').value = p.horas_estimadas||'';
+    document.getElementById('p-hreal').value = p.horas_reales||'';
+    populateAsignado(p.asignado_a);
+    resetAI(); resetCalTab(p);
+    activateFirstTab('modal-parte');
+    openModal('modal-parte');
+  } catch(e) { toast('Error cargando parte','error'); }
+}
+
+function populateAsignado(selected='') {
+  const sel = document.getElementById('p-asignado');
+  if (!sel) return;
+  sel.innerHTML = `<option value="">Sin asignar</option>` + allOperarios.map(u=>
+    `<option value="${u.id}" ${u.id===selected?'selected':''}>${u.nombre} (${u.rol})</option>`
+  ).join('');
+}
+
+async function guardarParte() {
+  const id = document.getElementById('p-id').value;
+  const isAdmin = ME?.rol === 'admin';
+
+  if (isAdmin) {
+    const data = {
+      cliente: document.getElementById('p-cliente').value.trim(),
+      telefono: document.getElementById('p-telefono').value.trim(),
+      direccion: document.getElementById('p-direccion').value.trim(),
+      titulo: document.getElementById('p-titulo').value.trim(),
+      tipo_trabajo: document.getElementById('p-tipo').value,
+      urgencia: document.getElementById('p-urgencia').value,
+      estado: document.getElementById('p-estado').value,
+      asignado_a: document.getElementById('p-asignado').value || null,
+      descripcion: document.getElementById('p-desc').value.trim(),
+      materiales: document.getElementById('p-mat').value.trim(),
+      observaciones: document.getElementById('p-obs').value.trim(),
+      horas_estimadas: parseFloat(document.getElementById('p-hest').value)||null,
+      horas_reales: parseFloat(document.getElementById('p-hreal').value)||null,
+    };
+    if (!data.cliente) return toast('El cliente es obligatorio','warn');
+    const btn = document.getElementById('btn-guardar-parte');
+    btn.disabled = true; btn.textContent = 'Guardando...';
+    try {
+      let parte;
+      if (id) { parte = await api('PUT',`/api/partes/${id}`, data); toast('Parte actualizado','success'); }
+      else { parte = await api('POST','/api/partes', data); currentParteId=parte.id; document.getElementById('p-id').value=parte.id; toast(`Parte ${parte.numero} creado`,'success'); }
+      await loadPartes(); await loadDashboard();
+    } catch(e) { toast(e.message,'error'); }
+    finally { btn.disabled=false; btn.textContent='💾 Guardar parte'; }
+  } else {
+    // Operario: only estado, horas_reales, observaciones
+    const data = {
+      estado: document.getElementById('p-estado').value,
+      horas_reales: parseFloat(document.getElementById('p-hreal').value)||null,
+      observaciones: document.getElementById('p-obs').value.trim(),
+    };
+    try {
+      await api('PUT',`/api/partes/${id}`,data);
+      toast('Parte actualizado','success');
+      await loadPartes(); await loadDashboard();
+    } catch(e) { toast(e.message,'error'); }
+  }
+}
+
+function editFromDetail() { closeModal('modal-detalle'); openEditParte(currentDetailId); }
+
+// ── FOTOS ─────────────────────────────────────────────────────
+function resetFotosTab() {
+  document.getElementById('fotos-grid-modal').innerHTML = `<div style="grid-column:1/-1;text-align:center;padding:30px;color:var(--text2)">💾 Guarda el parte primero para añadir fotos</div>`;
+  document.getElementById('fotos-count').textContent = '(0)';
+}
+
+async function handleFotoUpload(e) {
+  if (!currentParteId) return toast('Guarda el parte primero','warn');
+  const files = e.target.files; if(!files.length) return;
+  const fd = new FormData();
+  Array.from(files).forEach(f => fd.append('fotos', f));
+  fd.append('tipo', document.getElementById('foto-tipo').value);
+  fd.append('descripcion', document.getElementById('foto-desc').value);
+  toast(`Subiendo ${files.length} foto(s)...`,'info');
+  try {
+    const res = await fetch(API + `/api/partes/${currentParteId}/fotos`, { method:'POST', headers:{ Authorization:`Bearer ${TOKEN}` }, body:fd });
+    if (!res.ok) throw new Error((await res.json()).error);
+    toast(`${files.length} foto(s) subida(s)`,'success');
+    await loadFotos(currentParteId);
+    e.target.value='';
+  } catch(e) { toast('Error subiendo fotos: '+e.message,'error'); }
+}
+
+async function loadFotos(pid) {
+  try {
+    const p = await api('GET',`/api/partes/${pid}`);
+    const fotos = p.fotos||[];
+    document.getElementById('fotos-count').textContent = `(${fotos.length})`;
+    if (!fotos.length) {
+      document.getElementById('fotos-grid-modal').innerHTML = `<div style="grid-column:1/-1;text-align:center;padding:30px;color:var(--text2)">Sin fotos — arrastra imágenes arriba</div>`;
+      return;
+    }
+    document.getElementById('fotos-grid-modal').innerHTML = fotos.map(f=>`
+      <div class="foto-item">
+        <img src="${f.url}" onclick="openLB(${JSON.stringify(fotos).replace(/"/g,'&quot;')},'${f.id}')">
+        <div class="foto-item-ov">
+          <div class="foto-tipo-tag">${f.tipo||'general'}</div>
+          <div style="font-size:9px;color:rgba(255,255,255,.7)">${f.descripcion||''}</div>
+        </div>
+        <button class="foto-del" onclick="delFoto('${pid}','${f.id}')">✕</button>
+      </div>`).join('');
+  } catch(e) { console.error(e); }
+}
+
+async function delFoto(pid,fid) {
+  if (!confirm('¿Eliminar esta foto?')) return;
+  try { await api('DELETE',`/api/partes/${pid}/fotos/${fid}`); toast('Foto eliminada','success'); await loadFotos(pid); await loadDashboard(); }
+  catch(e) { toast('Error','error'); }
+}
+
+// Drag & drop
+const dz = document.getElementById('dropzone');
+dz.addEventListener('dragover', e=>{ e.preventDefault(); dz.classList.add('drag'); });
+dz.addEventListener('dragleave', ()=>dz.classList.remove('drag'));
+dz.addEventListener('drop', e=>{ e.preventDefault(); dz.classList.remove('drag'); if(e.dataTransfer.files.length) handleFotoUpload({target:{files:e.dataTransfer.files,value:''}}); });
+
+// ── LIGHTBOX ─────────────────────────────────────────────────
+function openLB(arr, targetId) {
+  lbImages = typeof arr==='string' ? JSON.parse(arr) : arr;
+  lbIdx = lbImages.findIndex(f=>f.id===targetId); if(lbIdx<0) lbIdx=0;
+  renderLB(); document.getElementById('lightbox').classList.add('open');
+}
+function openLBFromCard(pid,fid) { const p=allPartes.find(p=>p.id===pid); if(p?.fotos?.length) openLB(p.fotos,fid); }
+function renderLB() { const f=lbImages[lbIdx]; document.getElementById('lb-img').src=f.url; document.getElementById('lb-info').textContent=`${lbIdx+1}/${lbImages.length} · ${f.tipo||'general'}${f.descripcion?' · '+f.descripcion:''}`; }
+function lbNav(d) { lbIdx=(lbIdx+d+lbImages.length)%lbImages.length; renderLB(); }
+function closeLB() { document.getElementById('lightbox').classList.remove('open'); }
+document.getElementById('lightbox').addEventListener('click',e=>{ if(e.target===document.getElementById('lightbox')) closeLB(); });
+document.addEventListener('keydown',e=>{ const lb=document.getElementById('lightbox'); if(!lb.classList.contains('open')) return; if(e.key==='ArrowRight') lbNav(1); if(e.key==='ArrowLeft') lbNav(-1); if(e.key==='Escape') closeLB(); });
+
+// ── AI ────────────────────────────────────────────────────────
+function resetAI() { aiEst=null; document.getElementById('ai-resultado').style.display='none'; document.getElementById('ai-loading').style.display='none'; document.getElementById('btn-estimar').style.display='flex'; ['ai-mat-sec','ai-notas-sec','ai-risk-sec'].forEach(id=>document.getElementById(id).style.display=''); }
+
+async function estimarIA() {
+  const desc = document.getElementById('p-desc').value.trim();
+  if (!desc) return toast('Escribe la descripción del trabajo primero','warn');
+  document.getElementById('btn-estimar').style.display='none';
+  document.getElementById('ai-loading').style.display='flex';
+  document.getElementById('ai-resultado').style.display='none';
+  try {
+    let fotosInfo = [];
+    if (currentParteId) { try { const p=await api('GET',`/api/partes/${currentParteId}`); fotosInfo=p.fotos||[]; } catch{} }
+    const { estimacion: est, fallback } = await api('POST','/api/ai/estimar-tiempo', { descripcion:desc, tipo_trabajo:document.getElementById('p-tipo').value, urgencia:document.getElementById('p-urgencia').value, fotos_info: fotosInfo.map(f=>({tipo:f.tipo,descripcion:f.descripcion})) });
+    aiEst = est;
+    const cc={alta:'conf-alta',media:'conf-media',baja:'conf-baja'}[est.confianza]||'conf-media';
+    const kc={baja:'var(--success)',media:'var(--warn)',alta:'var(--accent3)',muy_alta:'var(--danger)'}[est.complejidad]||'var(--text)';
+    document.getElementById('ai-metrics').innerHTML = `
+      <div class="ai-metric"><div class="ai-ml">Tiempo</div><div class="ai-mv" style="color:var(--accent)">${est.tiempo_estimado_horas}h</div><div class="ai-ms">${est.tiempo_minimo_horas}–${est.tiempo_maximo_horas}h</div></div>
+      <div class="ai-metric"><div class="ai-ml">Precio M.O.</div><div class="ai-mv" style="color:var(--success)">€${est.precio_estimado_mano_obra?.toFixed(0)||0}</div></div>
+      <div class="ai-metric"><div class="ai-ml">Complejidad</div><div class="ai-mv" style="color:${kc};font-size:14px;margin-top:4px">${est.complejidad?.toUpperCase()}</div></div>
+      <div class="ai-metric"><div class="ai-ml">Confianza</div><div style="margin-top:6px"><span class="conf-badge ${cc}">${est.confianza?.toUpperCase()}</span></div>${fallback?'<div style="font-size:10px;color:var(--warn);margin-top:4px">Sin API key</div>':''}</div>
+    `;
+    if (est.desglose?.length) document.getElementById('ai-desglose').innerHTML=est.desglose.map(d=>`<div class="desg-item"><div><strong>${d.fase}</strong> <span style="color:var(--text2);font-size:11px">— ${d.descripcion}</span></div><div style="font-family:var(--mono);color:var(--accent)">${d.horas}h</div></div>`).join('');
+    if (est.materiales_estimados?.length) document.getElementById('ai-mat').innerHTML=est.materiales_estimados.map(m=>`• ${m}`).join('<br>'); else document.getElementById('ai-mat-sec').style.display='none';
+    if (est.notas) document.getElementById('ai-notas').textContent=est.notas; else document.getElementById('ai-notas-sec').style.display='none';
+    if (est.factores_riesgo?.length) document.getElementById('ai-risk').innerHTML=est.factores_riesgo.map(r=>`⚠️ ${r}`).join('<br>'); else document.getElementById('ai-risk-sec').style.display='none';
+    document.getElementById('ai-resultado').style.display='block';
+  } catch(e) { toast('Error IA: '+e.message,'error'); }
+  finally { document.getElementById('btn-estimar').style.display='flex'; document.getElementById('ai-loading').style.display='none'; }
+}
+
+function aplicarIA() {
+  if (!aiEst) return;
+  document.getElementById('p-hest').value = aiEst.tiempo_estimado_horas;
+  if (aiEst.materiales_estimados?.length && !document.getElementById('p-mat').value)
+    document.getElementById('p-mat').value = aiEst.materiales_estimados.join('\n');
+  toast('Estimación aplicada','success');
+  // Go to info tab
+  document.querySelector('.tab').click();
+}
+
+// ── CALENDAR ─────────────────────────────────────────────────
+function resetCalTab(parte=null) {
+  const hasToken = !!googleToken;
+  document.getElementById('cal-no-token').style.display = hasToken?'none':'block';
+  document.getElementById('cal-with-token').style.display = hasToken?'block':'none';
+  document.getElementById('cal-link-box').style.display = 'none';
+  if (parte?.google_event_link) {
+    document.getElementById('cal-link-box').style.display='block';
+    document.getElementById('cal-link-a').href=parte.google_event_link;
+  }
+}
+
+async function connectGoogle() {
+  try {
+    const { url, configured } = await api('GET','/api/google/auth-url');
+    if (!configured) { toast('Configura Google en el backend','warn'); }
+    else window.open(url,'_blank','width=500,height=600');
+  } catch {}
+  document.getElementById('gcal-token-section').style.display='block';
+}
+
+function saveGoogleToken() {
+  const t = document.getElementById('google-token').value.trim();
+  if (!t) return toast('Introduce el token','warn');
+  googleToken=t; localStorage.setItem('magu_gtoken',t);
+  toast('Token de Google guardado','success');
+  document.getElementById('gcal-status-txt').textContent='✅ Google Calendar conectado';
+  loadCalendarios();
+}
+
+async function loadCalendarios() {
+  if (!googleToken) return;
+  try {
+    const data = await fetch(`${API}/api/google/calendars?accessToken=${googleToken}`,{headers:{Authorization:`Bearer ${TOKEN}`}}).then(r=>r.json());
+    if (data.items) {
+      const s=document.getElementById('cal-id');
+      if(s) s.innerHTML=data.items.map(c=>`<option value="${c.id}">${c.summary}</option>`).join('');
+    }
+  } catch {}
+}
+
+async function crearEvento() {
+  if (!currentParteId) return toast('Guarda el parte primero','warn');
+  const fi=document.getElementById('cal-fi').value, hi=document.getElementById('cal-hi').value;
+  if (!fi||!hi) return toast('Selecciona fecha y hora de inicio','warn');
+  const ff=document.getElementById('cal-ff').value, hf=document.getElementById('cal-hf').value;
+  const start=`${fi}T${hi}:00`, end=ff&&hf?`${ff}T${hf}:00`:`${fi}T${parseInt(hi)+2}:00:00`;
+  try {
+    const r=await api('POST',`/api/partes/${currentParteId}/calendar`,{accessToken:googleToken,startDateTime:start,endDateTime:end,calendarId:document.getElementById('cal-id').value});
+    toast('Evento creado en Google Calendar','success');
+    document.getElementById('cal-link-box').style.display='block';
+    document.getElementById('cal-link-a').href=r.link;
+    await loadPartes();
+  } catch(e) { toast('Error Google Calendar: '+e.message,'error'); }
+}
+
+function loadCalendario() {
+  if (googleToken) { document.getElementById('gcal-status-txt').textContent='✅ Google Calendar conectado'; loadCalendarios(); }
+  const prog=allPartes.filter(p=>p.fecha_programada);
+  document.getElementById('cal-partes').innerHTML=prog.length===0
+    ?`<div class="empty"><div class="empty-icon">📅</div><div class="empty-title">Sin partes programados</div><div class="empty-desc">Edita un parte y usa la pestaña Calendario para programarlo</div></div>`
+    :prog.map(p=>`<div class="detail-section" style="margin-bottom:10px">
+        <div style="display:flex;justify-content:space-between;align-items:center">
+          <div>
+            <div style="font-size:10px;color:var(--accent);font-family:var(--mono)">${p.numero}</div>
+            <div style="font-size:14px;font-weight:700;margin-top:3px">${p.titulo||'Sin título'}</div>
+            <div style="font-size:12px;color:var(--text2);margin-top:3px">📅 ${new Date(p.fecha_programada).toLocaleString('es-ES')} · 👤 ${p.cliente}</div>
+          </div>
+          ${p.google_event_link?`<a href="${p.google_event_link}" target="_blank" class="btn btn-ghost btn-sm">📅 Ver</a>`:''}
+        </div>
+      </div>`).join('');
+}
+
+// ── DETALLE ───────────────────────────────────────────────────
+async function openDetalle(id) {
+  currentDetailId = id;
+  try {
+    const p = await api('GET',`/api/partes/${id}`);
+    document.getElementById('d-num').textContent = p.numero;
+    document.getElementById('d-title').textContent = p.titulo||p.descripcion?.substring(0,60)||'Parte de Trabajo';
+    const icons={electrico:'⚡',telecomunicaciones:'📡',hvac:'❄️',mantenimiento:'🔧',averia:'⚠️',otro:'📌'};
+    const fhp = p.fotos?.length ? `<div class="detail-section">
+      <div class="detail-section-title">📸 Fotos (${p.fotos.length})</div>
+      <div class="fotos-grid">${p.fotos.map(f=>`
+        <div class="foto-item"><img src="${f.url}" onclick="openLB(${JSON.stringify(p.fotos).replace(/"/g,'&quot;')},'${f.id}')">
+          <div class="foto-item-ov"><div class="foto-tipo-tag">${f.tipo||'general'}</div>${f.descripcion?`<div style="font-size:9px;color:rgba(255,255,255,.7)">${f.descripcion}</div>`:''}</div>
+        </div>`).join('')}</div></div>` : '';
+
+    document.getElementById('d-body').innerHTML = `
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:14px">
+        <div class="detail-section"><div class="detail-section-title">👤 Cliente</div>
+          <div class="detail-row"><span class="dk">Nombre</span><span class="dv">${p.cliente||'—'}</span></div>
+          <div class="detail-row"><span class="dk">Teléfono</span><span class="dv">${p.telefono||'—'}</span></div>
+          <div class="detail-row"><span class="dk">Dirección</span><span class="dv">${p.direccion||'—'}</span></div>
+        </div>
+        <div class="detail-section"><div class="detail-section-title">🔧 Trabajo</div>
+          <div class="detail-row"><span class="dk">Tipo</span><span class="dv">${icons[p.tipo_trabajo]||'📋'} ${p.tipo_trabajo||'—'}</span></div>
+          <div class="detail-row"><span class="dk">Estado</span><span class="dv"><span class="estado-badge eb-${p.estado}">${p.estado?.replace('_',' ')}</span></span></div>
+          <div class="detail-row"><span class="dk">Urgencia</span><span class="dv">${p.urgencia||'—'}</span></div>
+          <div class="detail-row"><span class="dk">Asignado</span><span class="dv">${p.asignado?.nombre||'Sin asignar'}</span></div>
+        </div>
+      </div>
+      <div class="detail-section"><div class="detail-section-title">📋 Descripción</div>
+        <p style="font-size:13px;line-height:1.7">${p.descripcion||'Sin descripción'}</p>
+        ${p.materiales?`<div class="detail-section-title" style="margin-top:12px">📦 Materiales</div><p style="font-size:12px;color:var(--text2);white-space:pre-line">${p.materiales}</p>`:''}
+        ${p.observaciones?`<div class="detail-section-title" style="margin-top:12px">📝 Observaciones</div><p style="font-size:12px;color:var(--text2)">${p.observaciones}</p>`:''}
+      </div>
+      <div class="detail-section"><div class="detail-section-title">⏱ Tiempos</div>
+        <div class="detail-row"><span class="dk">Estimadas</span><span class="dv" style="color:var(--accent);font-family:var(--mono)">${p.horas_estimadas?p.horas_estimadas+'h':'—'}</span></div>
+        <div class="detail-row"><span class="dk">Reales</span><span class="dv" style="color:var(--success);font-family:var(--mono)">${p.horas_reales?p.horas_reales+'h':'—'}</span></div>
+        ${p.fecha_programada?`<div class="detail-row"><span class="dk">Programado</span><span class="dv">${new Date(p.fecha_programada).toLocaleString('es-ES')}</span></div>`:''}
+        ${p.google_event_link?`<div class="detail-row"><span class="dk">Google Cal</span><span class="dv"><a href="${p.google_event_link}" target="_blank" style="color:var(--accent2)">Ver evento →</a></span></div>`:''}
+      </div>
+      ${fhp}
+      <div class="detail-section"><div class="detail-section-title">📅 Fechas</div>
+        <div class="detail-row"><span class="dk">Creado</span><span class="dv">${new Date(p.creado_en).toLocaleString('es-ES')}</span></div>
+        <div class="detail-row"><span class="dk">Actualizado</span><span class="dv">${new Date(p.actualizado_en).toLocaleString('es-ES')}</span></div>
+      </div>
+    `;
+    // Show/hide edit and delete based on role
+    document.getElementById('btn-edit-det').style.display = ME?.rol==='admin' || p.asignado_a===ME?.id ? '' : 'none';
+    document.getElementById('btn-del-det').style.display = ME?.rol==='admin' ? '' : 'none';
+    document.getElementById('btn-del-det').onclick = () => deleteParte(id);
+    openModal('modal-detalle');
+  } catch(e) { toast('Error cargando detalle','error'); }
+}
+
+async function deleteParte(id) {
+  if (!confirm('¿Eliminar este parte y todas sus fotos? No se puede deshacer.')) return;
+  try { await api('DELETE',`/api/partes/${id}`); closeModal('modal-detalle'); toast('Parte eliminado','success'); await loadPartes(); await loadDashboard(); }
+  catch(e) { toast(e.message,'error'); }
+}
+
+// ── OPERARIOS ─────────────────────────────────────────────────
+async function loadOperarios() {
+  if (ME?.rol !== 'admin') return;
+  try {
+    allOperarios = await api('GET','/api/usuarios');
+    const tbody = document.getElementById('operarios-tbody');
+    if (!tbody) return;
+    tbody.innerHTML = allOperarios.map(u=>`
+      <tr>
+        <td style="font-weight:600">${u.nombre}</td>
+        <td style="font-family:var(--mono);font-size:12px">${u.email}</td>
+        <td><span class="rol-badge rol-${u.rol}">${u.rol}</span></td>
+        <td>${u.telefono||'—'}</td>
+        <td><span class="status-dot ${u.activo?'dot-active':'dot-inactive'}"></span>${u.activo?'Activo':'Inactivo'}</td>
+        <td style="font-size:12px;color:var(--text2)">${u.ultimo_acceso?new Date(u.ultimo_acceso).toLocaleDateString('es-ES'):'Nunca'}</td>
+        <td>
+          <button class="btn btn-ghost btn-xs" onclick="openEditOperario('${u.id}')">✏️</button>
+          ${u.id!==ME.id?`<button class="btn btn-danger btn-xs" style="margin-left:4px" onclick="toggleOperario('${u.id}','${!u.activo}')"> ${u.activo?'Desactivar':'Activar'}</button>`:''}
+        </td>
+      </tr>`).join('');
+  } catch(e) { toast('Error cargando operarios','error'); }
+}
+
+function openNuevoOperario() {
+  document.getElementById('mo-title').textContent = 'Nuevo usuario';
+  ['op-id','op-nombre','op-email','op-tel','op-pw','op-pw2'].forEach(id=>{ const el=document.getElementById(id); if(el) el.value=''; });
+  document.getElementById('op-rol').value = 'operario';
+  document.getElementById('op-activo').value = 'true';
+  document.getElementById('op-pw-group').style.display = '';
+  document.getElementById('op-pw-change').style.display = 'none';
+  openModal('modal-operario');
+}
+
+function openEditOperario(id) {
+  const u = allOperarios.find(u=>u.id===id);
+  if (!u) return;
+  document.getElementById('mo-title').textContent = `Editar ${u.nombre}`;
+  document.getElementById('op-id').value = u.id;
+  document.getElementById('op-nombre').value = u.nombre;
+  document.getElementById('op-email').value = u.email;
+  document.getElementById('op-tel').value = u.telefono||'';
+  document.getElementById('op-rol').value = u.rol;
+  document.getElementById('op-activo').value = String(u.activo);
+  document.getElementById('op-pw-group').style.display = 'none';
+  document.getElementById('op-pw-change').style.display = '';
+  document.getElementById('op-pw2').value = '';
+  openModal('modal-operario');
+}
+
+async function guardarOperario() {
+  const id = document.getElementById('op-id').value;
+  const nombre = document.getElementById('op-nombre').value.trim();
+  const email = document.getElementById('op-email').value.trim();
+  const telefono = document.getElementById('op-tel').value.trim();
+  const rol = document.getElementById('op-rol').value;
+  const activo = document.getElementById('op-activo').value === 'true';
+  if (!nombre || !email) return toast('Nombre y email obligatorios','warn');
+  const data = { nombre, email, rol, telefono, activo };
+  if (!id) {
+    const pw = document.getElementById('op-pw').value;
+    if (!pw || pw.length < 8) return toast('Contraseña mínimo 8 caracteres','warn');
+    data.password = pw;
+  } else {
+    const pw2 = document.getElementById('op-pw2').value;
+    if (pw2) { if(pw2.length<8) return toast('Contraseña mínimo 8 caracteres','warn'); data.password=pw2; }
+  }
+  try {
+    if (id) await api('PUT',`/api/usuarios/${id}`,data);
+    else await api('POST','/api/usuarios',data);
+    toast(id?'Usuario actualizado':'Usuario creado','success');
+    closeModal('modal-operario');
+    await loadOperarios();
+  } catch(e) { toast(e.message,'error'); }
+}
+
+async function toggleOperario(id, activate) {
+  const action = activate==='true'?'activar':'desactivar';
+  if (!confirm(`¿${action.charAt(0).toUpperCase()+action.slice(1)} este usuario?`)) return;
+  try { await api('PUT',`/api/usuarios/${id}`,{ activo: activate==='true' }); toast(`Usuario ${action}do`,'success'); await loadOperarios(); }
+  catch(e) { toast(e.message,'error'); }
+}
+
+// ── CONFIG ────────────────────────────────────────────────────
+async function loadConfig() {
+  try {
+    const cfg = await api('GET','/api/config');
+    document.getElementById('cfg-nombre').value = cfg.nombre_empresa||'';
+    document.getElementById('cfg-telefono').value = cfg.telefono_empresa||'';
+    document.getElementById('cfg-email').value = cfg.email_empresa||'';
+    document.getElementById('cfg-direccion').value = cfg.direccion_empresa||'';
+    document.getElementById('cfg-tarifa').value = cfg.tarifa_hora||45;
+    if (cfg.nombre_empresa) document.getElementById('sidebar-logo').textContent = `⚡ ${cfg.nombre_empresa.split(' ')[0]}`;
+  } catch {}
+}
+
+async function saveConfig() {
+  const data = {
+ment.getElementById('cfg-direccion').value,
+    tarifa_hora: parseFloat(document.getElementById('cfg-tarifa').value)||45,
+    actualizado_en: new Date().toISOString()
+  };
+  try { await api('PUT','/api/config',data); toast('Configuración guardada','success'); }
+  catch(e) { toast(e.message,'error'); }
+}
+
+async function testConn() {
+  const url = document.getElementById('cfg-api-url').value.trim()||API;
+  const el = document.getElementById('conn-status');
+  el.textContent='⏳ Probando...'; el.style.color='var(--text2)';
+  try {
+    const r = await fetch(`${url}/api/health`); const d=await r.json();
+    el.innerHTML=`<span style="color:var(--success)">✅ Conectado · ${d.version||''} · ${d.timestamp}</span>`;
+  } catch { el.innerHTML=`<span style="color:var(--danger)">❌ No se puede conectar a ${url}</span>`; }
+}
+
+function saveApiUrl() {
+  const url = document.getElementById('cfg-api-url').value.trim();
+  if(url){ API=url; localStorage.setItem('magu_api',url); toast('URL guardada','success'); }
+}
+
+// ── MI CUENTA ─────────────────────────────────────────────────
+async function saveProfile() {
+  const data = { nombre: document.getElementById('mc-nombre').value.trim(), telefono: document.getElementById('mc-telefono').value.trim() };
+  if (!data.nombre) return toast('El nombre es obligatorio','warn');
+  try { await api('PUT',`/api/usuarios/${ME.id}`,data); ME.nombre=data.nombre; updateSidebar(); toast('Perfil actualizado','success'); }
+  catch(e) { toast(e.message,'error'); }
+}
+
+async function changePassword() {
+  const cur=document.getElementById('pw-current').value, nw=document.getElementById('pw-new').value, cf=document.getElementById('pw-confirm').value;
+  if (!cur||!nw||!cf) return toast('Rellena todos los campos','warn');
+  if (nw!==cf) return toast('Las contraseñas no coinciden','warn');
+  if (nw.length<8) return toast('Mínimo 8 caracteres','warn');
+  try { await api('POST','/api/auth/change-password',{currentPassword:cur,newPassword:nw}); toast('Contraseña actualizada','success'); ['pw-current','pw-new','pw-confirm'].forEach(id=>document.getElementById(id).value=''); }
+  catch(e) { toast(e.message,'error'); }
+}
+
+// ── MODAL HELPERS ─────────────────────────────────────────────
+function openModal(id) { document.getElementById(id).classList.add('open'); document.body.style.overflow='hidden'; }
+function closeModal(id) { document.getElementById(id).classList.remove('open'); document.body.style.overflow=''; }
+document.querySelectorAll('.modal-overlay').forEach(o=>o.addEventListener('click',e=>{ if(e.target===o) closeModal(o.id); }));
+function activateFirstTab(modalId) {
+  const m=document.getElementById(modalId);
+  m.querySelectorAll('.tab').forEach((t,i)=>t.classList.toggle('active',i===0));
+  m.querySelectorAll('.tab-content').forEach((t,i)=>t.classList.toggle('active',i===0));
+}
+
+// ── TOASTS ────────────────────────────────────────────────────
+function toast(msg, type='info') {
+  const box=document.getElementById('toast-box');
+  const t=document.createElement('div');
+  t.className=`toast toast-${type}`;
+  t.innerHTML=`${type==='success'?'✅':type==='error'?'❌':type==='warn'?'⚠️':'ℹ️'} ${msg}`;
+  box.appendChild(t);
+  setTimeout(()=>t.remove(),4000);
+}
+
+// ── INIT ──────────────────────────────────────────────────────
+// Try to auto-login with saved token
+if (TOKEN) {
+  fetch(API+'/api/auth/me',{headers:{Authorization:`Bearer ${TOKEN}`}})
+    .then(r=>r.ok?r.json():null)
+    .then(user=>{ if(user){ ME=user; initApp(); } })
+    .catch(()=>{});
+}
+</script>
+</body>
+</html>
